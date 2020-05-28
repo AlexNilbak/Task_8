@@ -2,12 +2,14 @@
 #include <stdlib.h>
 
 
-typedef struct{
+typedef struct Triangle{
     int x1, y1, x2, y2, x3, y3;
     struct Triangle* next;
     struct Triangle* previous;
 }Triangle;
 
+
+int Check_intersc(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4);
 
 int Add_tr(Triangle** last, Triangle** first, int x1, int y1, int x2, int y2, int x3, int y3){
     Triangle* newtr;
@@ -57,38 +59,47 @@ int* Get_tr(Triangle** trtr, int number){
     for(int i=0; i<number; i++){
         q=Check_intersc(c[0], c[1], c[2], c[3], (*trtr)->x1, (*trtr)->y1, (*trtr)->x2, (*trtr)->y2);
         if(q==1){
+            free(c);
             return NULL;
         }
         q=Check_intersc(c[0], c[1], c[2], c[3], (*trtr)->x1, (*trtr)->y1, (*trtr)->x3, (*trtr)->y3);
         if(q==1){
+            free(c);
             return NULL;
         }
         q=Check_intersc(c[0], c[1], c[2], c[3], (*trtr)->x3, (*trtr)->y3, (*trtr)->x2, (*trtr)->y2);
         if(q==1){
+            free(c);
             return NULL;
         }
         q=Check_intersc(c[4], c[5], c[2], c[3], (*trtr)->x1, (*trtr)->y1, (*trtr)->x2, (*trtr)->y2);
         if(q==1){
+            free(c);
             return NULL;
         }
         q=Check_intersc(c[4], c[5], c[2], c[3], (*trtr)->x1, (*trtr)->y1, (*trtr)->x3, (*trtr)->y3);
         if(q==1){
+            free(c);
             return NULL;
         }
         q=Check_intersc(c[4], c[5], c[2], c[3], (*trtr)->x3, (*trtr)->y3, (*trtr)->x2, (*trtr)->y2);
         if(q==1){
+            free(c);
             return NULL;
         }
         q=Check_intersc(c[0], c[1], c[4], c[5], (*trtr)->x1, (*trtr)->y1, (*trtr)->x2, (*trtr)->y2);
         if(q==1){
+            free(c);
             return NULL;
         }
         q=Check_intersc(c[0], c[1], c[4], c[5], (*trtr)->x1, (*trtr)->y1, (*trtr)->x3, (*trtr)->y3);
         if(q==1){
+            free(c);
             return NULL;
         }
         q=Check_intersc(c[0], c[1], c[4], c[5], (*trtr)->x3, (*trtr)->y3, (*trtr)->x2, (*trtr)->y2);
         if(q==1){
+            free(c);
             return NULL;
         }
         (*trtr)=(*trtr)->next;
@@ -132,6 +143,8 @@ int Check_intersc(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4
 int main(void){
     int* c;
     int number;
+    Triangle** del;
+    Triangle** led;
     Triangle* newtr;
     Triangle* first;
     Triangle* last;
@@ -167,6 +180,13 @@ int main(void){
     if(c==NULL){
         printf("New triangle intersects another one\n");
         printf("Please repeat\n");
+        del=&newtr;
+        for (int i = 0; i < number-1; i++){
+            led=&((*del)->next);
+            free(*del);
+            del=led;
+        }
+        free(*del);
         return 1;
     }
 
@@ -176,5 +196,12 @@ int main(void){
     printf("\n");
     printf("New list of triangles:\n");
     Printer(&first, number);
+    del=&newtr;
+    for (int i = 0; i < number-1; i++){
+        led=&((*del)->next);
+        free(*del);
+        del=led;
+    }
+    free(*del);
     return 0;
 }
